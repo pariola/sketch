@@ -7,7 +7,7 @@ import (
 // canvas
 type canvas struct {
 
-	// 2D array
+	// 2D array to represent the points on a canvas starting from (0,0) top left
 	matrix [][]string
 }
 
@@ -39,7 +39,7 @@ func (c *canvas) boundary() (int, int) {
 	return x, y
 }
 
-// expand
+// expand increases the size of the Canvas to specified size if current size is smaller
 func (c *canvas) expand(x, y int) {
 
 	boundX, boundY := c.boundary()
