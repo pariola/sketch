@@ -35,5 +35,28 @@ func (c *canvas) boundary() (int, int) {
 	return x, y
 }
 
-// Draw
-func (c *canvas) Draw(r Rectangle) {}
+// Draw draws a rectangle unto the canvas
+func (c *canvas) Draw(r Rectangle) {
+
+	for y := r.posY; y < r.posY+r.height; y++ {
+		for x := r.posX; x < r.posX+r.width; x++ {
+
+			// fill
+			c.matrix[y][x] = r.fillChar
+
+			// paint outline
+			// confirm if point is part of the rectangle boundary
+			if r.outlineChar != "" && (inYBoundary(x, y, r) || inXBoundary(x, y, r)) {
+				c.matrix[y][x] = r.outlineChar
+			}
+		}
+	}
+}
+
+func inXBoundary(x, y int, r Rectangle) bool {
+	return x >= r.posX && x < r.posX+r.width && (y == r.posY || y == r.posY+r.height-1)
+}
+
+func inYBoundary(x, y int, r Rectangle) bool {
+	return y >= r.posY && y < r.posY+r.height && (x == r.posX || x == r.posX+r.width-1)
+}
