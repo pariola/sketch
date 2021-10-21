@@ -21,7 +21,9 @@ type Rectangle struct {
 // NewRectangle returns an instance of Rectangle with the specified parameters
 func NewRectangle(posX, posY, width, height int, fill, outline string) *Rectangle {
 
-	// todo: validate
+	if posX < 0 || posY < 0 || width < 0 || height < 0 {
+		return nil
+	}
 
 	// one of either fill or outline should always be present
 	if outline == "" && fill == "" {
