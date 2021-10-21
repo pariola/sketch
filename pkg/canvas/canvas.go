@@ -13,3 +13,17 @@ func New() *canvas {
 		matrix: make([][]string, 0),
 	}
 }
+
+// edges returns the edges of x & y-axis
+func (c *canvas) edges() (int, int) {
+
+	var x, y int
+
+	y = len(c.matrix)
+
+	if y > 0 {
+		x = len(c.matrix[0])
+	}
+
+	return x, y
+}
