@@ -21,8 +21,8 @@ func New(width, height int) *canvas {
 	}
 }
 
-// edges returns the edges of x & y-axis
-func (c *canvas) edges() (int, int) {
+// boundary returns the edges/boundaries (x-axis, y-axis) of the canvas
+func (c *canvas) boundary() (int, int) {
 
 	var x, y int
 
