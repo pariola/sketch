@@ -7,10 +7,17 @@ type canvas struct {
 	matrix [][]string
 }
 
-// New returns an instance of the canvas
-func New() *canvas {
+// New returns an instance of the canvas with the required size
+func New(width, height int) *canvas {
+
+	matrix := make([][]string, height)
+
+	for i := 0; i < len(matrix); i++ {
+		matrix[i] = make([]string, width)
+	}
+
 	return &canvas{
-		matrix: make([][]string, 0),
+		matrix: matrix,
 	}
 }
 
