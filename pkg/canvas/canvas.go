@@ -1,5 +1,9 @@
 package canvas
 
+import (
+	"bytes"
+)
+
 // canvas
 type canvas struct {
 
@@ -61,4 +65,22 @@ func inXBoundary(x, y int, r Rectangle) bool {
 
 func inYBoundary(x, y int, r Rectangle) bool {
 	return y >= r.posY && y < r.posY+r.height && (x == r.posX || x == r.posX+r.width-1)
+}
+
+// Print returns the string representation of the canvas
+func (c *canvas) Print() string {
+
+	var buf bytes.Buffer
+
+	boundX, boundY := c.boundary()
+
+	// read all cells
+	for y := 0; y < boundY; y++ {
+		for x := 0; x < boundX; x++ {
+			cell := c.matrix[y][x]
+			buf.WriteString(cell)
+		}
+	}
+
+	return buf.String()
 }
