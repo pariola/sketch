@@ -38,6 +38,8 @@ func (c *canvas) boundary() (int, int) {
 // Draw draws a rectangle unto the canvas
 func (c *canvas) Draw(r Rectangle) {
 
+	// todo: expand canvas if rectangle out of bounds
+
 	for y := r.posY; y < r.posY+r.height; y++ {
 		for x := r.posX; x < r.posX+r.width; x++ {
 
