@@ -71,7 +71,8 @@ func (c *canvas) expand(x, y int) {
 // Draw draws a rectangle unto the canvas
 func (c *canvas) Draw(r Rectangle) {
 
-	// todo: expand canvas if rectangle out of bounds
+	// expand canvas to contain rectangle
+	c.expand(r.posX+r.width, r.posY+r.height)
 
 	for y := r.posY; y < r.posY+r.height; y++ {
 		for x := r.posX; x < r.posX+r.width; x++ {
