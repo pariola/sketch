@@ -80,6 +80,7 @@ func (c *canvas) Print() string {
 			cell := c.matrix[y][x]
 			buf.WriteString(cell)
 		}
+		buf.WriteString(" ")
 	}
 
 	return buf.String()
