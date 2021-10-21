@@ -1,6 +1,6 @@
 package canvas
 
-// Rectangle
+// Rectangle represents a rectangle to be drawn
 type Rectangle struct {
 
 	// posX, posY represents the upper left coordinates to draw the Rectangle
