@@ -41,7 +41,7 @@ func TestCanvas_DrawWithFill(t *testing.T) {
 
 	c.Draw(*r)
 
-	// confirm all matrix cells
+	// confirm all rectangle cells
 	for y := r.posY; y < r.posY+r.height; y++ {
 		for x := r.posX; x < r.posX+r.width; x++ {
 			assert.Equalf(t, r.fillChar, c.matrix[y][x], "invalid cell [%d, %d]", x, y)
@@ -86,6 +86,31 @@ func TestCanvas_DrawWithFillOutline(t *testing.T) {
 				// insides
 				assert.Equalf(t, r.fillChar, c.matrix[y][x], "invalid cell [%d, %d]", x, y)
 			}
+		}
+	}
+}
+
+func TestCanvas_expand(t *testing.T) {
+
+	c := New(7, 5) // 7x5
+
+	// draw on canvas
+	r := NewRectangle(0, 0, 5, 3, "X", "")
+
+	c.Draw(*r)
+
+	// expand to 10x10
+	c.expand(10, 10)
+
+	boundX, boundY := c.boundary()
+
+	assert.Equal(t, 10, boundX, "width should increase")
+	assert.Equal(t, 10, boundY, "height should increase")
+
+	// confirm all rectangle cells
+	for y := r.posY; y < r.posY+r.height; y++ {
+		for x := r.posX; x < r.posX+r.width; x++ {
+			assert.Equalf(t, r.fillChar, c.matrix[y][x], "invalid cell [%d, %d]", x, y)
 		}
 	}
 }

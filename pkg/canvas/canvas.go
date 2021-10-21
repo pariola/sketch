@@ -39,6 +39,35 @@ func (c *canvas) boundary() (int, int) {
 	return x, y
 }
 
+// expand
+func (c *canvas) expand(x, y int) {
+
+	boundX, boundY := c.boundary()
+
+	// expand y-axis
+	if y > boundY {
+
+		// add blank rows
+		for i := 0; i < (y - boundY); i++ {
+			c.matrix = append(c.matrix, make([]string, boundX))
+		}
+
+		boundY = y
+	}
+
+	// expand x-axis
+	if x > boundX {
+		boundX = x
+
+		// expand all rows by copying
+		for i := 0; i < boundY; i++ {
+			row := make([]string, boundX)
+			copy(row, c.matrix[i])
+			c.matrix[i] = row
+		}
+	}
+}
+
 // Draw draws a rectangle unto the canvas
 func (c *canvas) Draw(r Rectangle) {
 
