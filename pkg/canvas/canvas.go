@@ -34,3 +34,6 @@ func (c *canvas) boundary() (int, int) {
 
 	return x, y
 }
+
+// Draw
+func (c *canvas) Draw(r Rectangle) {}
