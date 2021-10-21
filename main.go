@@ -19,7 +19,7 @@ func main() {
 	// register routes
 	e := echo.New()
 
-	e.POST("/:id/draw", h.Draw)
+	e.POST("/:id/draw", h.DrawRectangle)
 
 	// start server
 	log.Fatalln(e.Start(":5000"))

@@ -13,8 +13,8 @@ func New() *sketch {
 	return &sketch{}
 }
 
-// Draw retrieves the referenced canvas then draws a new Rectangle on it
-func (s sketch) Draw(canvasId string, request DrawRequest) (string, error) {
+// DrawRectangle retrieves the referenced canvas then draws a new Rectangle on it
+func (s sketch) DrawRectangle(canvasId string, request DrawRectangleRequest) (string, error) {
 
 	// todo: fetch from store
 	c := canvas.New(10, 12)

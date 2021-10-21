@@ -1,7 +1,7 @@
 package service
 
-// DrawRequest represents a draw rectangle operation on the canvas
-type DrawRequest struct {
+// DrawRectangleRequest represents a draw rectangle operation on the canvas
+type DrawRectangleRequest struct {
 	PosX int `json:"pos_x"`
 	PosY int `json:"pos_y"`
 

@@ -22,18 +22,18 @@ func New(svc SketchService) *router {
 	return &router{svc: svc}
 }
 
-// Draw draws a rectangle
-func (r router) Draw(e echo.Context) error {
+// DrawRectangle draws a rectangle
+func (r router) DrawRectangle(e echo.Context) error {
 
 	id := e.Param("id")
 
-	var request service.DrawRequest
+	var request service.DrawRectangleRequest
 
 	if e.Bind(&request) != nil {
 		return EchoErrBadRequest
 	}
 
-	paint, _ := r.svc.Draw(id, request)
+	paint, _ := r.svc.DrawRectangle(id, request)
 
 	return e.String(http.StatusOK, paint)
 }
