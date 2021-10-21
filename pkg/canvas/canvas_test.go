@@ -67,3 +67,25 @@ func TestCanvas_DrawWithOutline(t *testing.T) {
 		}
 	}
 }
+
+func TestCanvas_DrawWithFillOutline(t *testing.T) {
+
+	c := New(12, 12) // 12x12
+
+	// rectangle at [2,2] width: 5, height: 5, fill: none, outline: 'X'
+	r := NewRectangle(2, 2, 5, 5, "O", "X")
+
+	c.Draw(*r)
+
+	for y := r.posY; y < r.posY+r.height; y++ {
+		for x := r.posX; x < r.posX+r.width; x++ {
+			if inYBoundary(x, y, *r) || inXBoundary(x, y, *r) {
+				// boundary
+				assert.Equalf(t, r.outlineChar, c.matrix[y][x], "invalid cell [%d, %d]", x, y)
+			} else {
+				// insides
+				assert.Equalf(t, r.fillChar, c.matrix[y][x], "invalid cell [%d, %d]", x, y)
+			}
+		}
+	}
+}
