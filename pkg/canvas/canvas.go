@@ -4,15 +4,15 @@ import (
 	"bytes"
 )
 
-// canvas
-type canvas struct {
+// Canvas
+type Canvas struct {
 
-	// 2D array to represent the points on a canvas starting from (0,0) top left
+	// 2D array to represent the points on a Canvas starting from (0,0) top left
 	matrix [][]string
 }
 
-// New returns an instance of the canvas with the required size
-func New(width, height int) *canvas {
+// New returns an instance of the Canvas with the required size
+func New(width, height int) *Canvas {
 
 	matrix := make([][]string, height)
 
@@ -20,13 +20,13 @@ func New(width, height int) *canvas {
 		matrix[i] = make([]string, width)
 	}
 
-	return &canvas{
+	return &Canvas{
 		matrix: matrix,
 	}
 }
 
-// boundary returns the edges/boundaries (x-axis, y-axis) of the canvas
-func (c *canvas) boundary() (int, int) {
+// boundary returns the edges/boundaries (x-axis, y-axis) of the Canvas
+func (c *Canvas) boundary() (int, int) {
 
 	var x, y int
 
@@ -40,7 +40,7 @@ func (c *canvas) boundary() (int, int) {
 }
 
 // expand increases the size of the Canvas to specified size if current size is smaller
-func (c *canvas) expand(x, y int) {
+func (c *Canvas) expand(x, y int) {
 
 	boundX, boundY := c.boundary()
 
@@ -68,10 +68,10 @@ func (c *canvas) expand(x, y int) {
 	}
 }
 
-// Draw draws a rectangle unto the canvas
-func (c *canvas) Draw(r Rectangle) {
+// Draw draws a rectangle unto the Canvas
+func (c *Canvas) Draw(r Rectangle) {
 
-	// expand canvas to contain rectangle
+	// expand Canvas to contain rectangle
 	c.expand(r.posX+r.width, r.posY+r.height)
 
 	for y := r.posY; y < r.posY+r.height; y++ {
@@ -90,7 +90,7 @@ func (c *canvas) Draw(r Rectangle) {
 }
 
 // FloodFill wrapper for floodFill
-func (c *canvas) FloodFill(x, y int, fillChar string) {
+func (c *Canvas) FloodFill(x, y int, fillChar string) {
 
 	target := c.matrix[y][x]
 
@@ -106,9 +106,9 @@ func (c *canvas) FloodFill(x, y int, fillChar string) {
 // continues to attempt drawing the character around (up, down, left, right)
 // in each direction from the position it was drawn at, as long as a different
 // character, or a border of the Canvas, is not reached.
-func (c *canvas) floodFill(x, y int, targetChar, fillChar string) {
+func (c *Canvas) floodFill(x, y int, targetChar, fillChar string) {
 
-	// check canvas bounds
+	// check Canvas bounds
 	boundX, boundY := c.boundary()
 
 	if x < 0 || x >= boundX || y < 0 || y >= boundY {
@@ -133,8 +133,8 @@ func (c *canvas) floodFill(x, y int, targetChar, fillChar string) {
 	c.floodFill(x+1, y, targetChar, fillChar) // right
 }
 
-// Print returns the string representation of the canvas
-func (c *canvas) Print() string {
+// Print returns the string representation of the Canvas
+func (c *Canvas) Print() string {
 
 	var buf bytes.Buffer
 
