@@ -29,6 +29,10 @@
         var out = document.getElementById('output');
         out.innerHTML = evt.data;
     }
+
+    setInterval(function () {
+        ws.send('alive');
+    }, 1000);
 </script>
 </body>
 

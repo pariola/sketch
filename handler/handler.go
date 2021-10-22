@@ -65,7 +65,9 @@ func (r *router) PrintCanvasWS(e echo.Context) error {
 		_ = websocket.Message.Send(c, paint)
 
 		// keep alive
-		for true {
+		for {
+			msg := ""
+			_ = websocket.Message.Receive(c, &msg)
 		}
 
 	}).ServeHTTP(e.Response(), e.Request())
