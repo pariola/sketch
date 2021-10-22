@@ -19,10 +19,13 @@ func main() {
 	// register routes
 	e := echo.New()
 
-	e.GET("/", h.NewCanvas)
-	e.GET("/:id", h.PrintCanvas)
-	e.POST("/:id/draw", h.DrawRectangle)
-	e.POST("/:id/floodfill", h.FloodFill)
+	e.File("/*", "static/index.html")
+
+	e.GET("/api/canvas", h.NewCanvas)
+	e.GET("/api/canvas/:id", h.PrintCanvas)
+	e.GET("/api/canvas/:id/ws", h.PrintCanvasWS)
+	e.POST("/api/canvas/:id/draw", h.DrawRectangle)
+	e.POST("/api/canvas/:id/floodfill", h.FloodFill)
 
 	// start server
 	log.Fatalln(e.Start(":5000"))
