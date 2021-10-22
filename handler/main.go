@@ -37,3 +37,19 @@ func (r router) DrawRectangle(e echo.Context) error {
 
 	return e.String(http.StatusOK, paint)
 }
+
+// FloodFill performs a flood fill operation on the canvas
+func (r router) FloodFill(e echo.Context) error {
+
+	id := e.Param("id")
+
+	var request service.FloodFillRequest
+
+	if e.Bind(&request) != nil {
+		return EchoErrBadRequest
+	}
+
+	paint, _ := r.svc.FloodFill(id, request)
+
+	return e.String(http.StatusOK, paint)
+}

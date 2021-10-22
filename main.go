@@ -20,6 +20,7 @@ func main() {
 	e := echo.New()
 
 	e.POST("/:id/draw", h.DrawRectangle)
+	e.POST("/:id/floodfill", h.FloodFill)
 
 	// start server
 	log.Fatalln(e.Start(":5000"))
