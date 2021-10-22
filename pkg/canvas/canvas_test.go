@@ -186,3 +186,18 @@ func TestCanvas_FloodFillBoundary(t *testing.T) {
 	// confirm if resulting matrix matches the expected matrix
 	assert.Equal(t, expected, c.matrix, "result does not match expected matrix")
 }
+
+func TestCanvas_Print(t *testing.T) {
+
+	expected := "---------------.......------ ---------------.......------ ---------------.......------ OOOOOOOO-------.......------ O O-------.......------ O XXXXX-----.......------ OOOOOXXXXX------------------ -----XXXXX------------------ ---------------------------- ---------------------------- ---------------------------- ----------------------------"
+
+	c := New(28, 12)
+
+	c.Draw(*NewRectangle(15, 0, 7, 6, ".", ""))
+	c.Draw(*NewRectangle(0, 3, 8, 4, "", "O"))
+	c.Draw(*NewRectangle(5, 5, 5, 3, "X", "X"))
+
+	c.FloodFill(0, 0, "-")
+
+	assert.Equal(t, expected, c.Print())
+}
