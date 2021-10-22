@@ -28,6 +28,12 @@ func New(svc SketchService) *router {
 	}
 }
 
+// NewCanvasPage creates a new canvas and redirects to /<canvas id>
+func (r router) NewCanvasPage(e echo.Context) error {
+	id := r.svc.NewCanvas()
+	return e.Redirect(http.StatusTemporaryRedirect, "/"+id)
+}
+
 // NewCanvas creates a new canvas
 func (r router) NewCanvas(e echo.Context) error {
 	id := r.svc.NewCanvas()

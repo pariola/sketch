@@ -19,8 +19,11 @@ func main() {
 	// register routes
 	e := echo.New()
 
-	e.File("/*", "static/index.html")
+	// client view
+	e.GET("/", h.NewCanvasPage)
+	e.File("/:id", "static/index.html")
 
+	// backend
 	e.GET("/api/canvas", h.NewCanvas)
 	e.GET("/api/canvas/:id", h.PrintCanvas)
 	e.GET("/api/canvas/:id/ws", h.PrintCanvasWS)
