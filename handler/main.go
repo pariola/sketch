@@ -35,8 +35,12 @@ func (r router) PrintCanvas(e echo.Context) error {
 
 	paint, err := r.svc.PrintCanvas(id)
 
-	if err != nil {
-		return err
+	switch err {
+	case nil:
+	case service.ErrNoCanvas:
+		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+	default:
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	return e.String(http.StatusOK, paint)
@@ -53,7 +57,17 @@ func (r router) DrawRectangle(e echo.Context) error {
 		return EchoErrBadRequest
 	}
 
-	paint, _ := r.svc.DrawRectangle(id, request)
+	paint, err := r.svc.DrawRectangle(id, request)
+
+	switch err {
+	case nil:
+	case service.ErrNoCanvas:
+		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+	case service.ErrInvalidRectangle:
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	default:
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
 
 	return e.String(http.StatusOK, paint)
 }
@@ -69,7 +83,15 @@ func (r router) FloodFill(e echo.Context) error {
 		return EchoErrBadRequest
 	}
 
-	paint, _ := r.svc.FloodFill(id, request)
+	paint, err := r.svc.FloodFill(id, request)
+
+	switch err {
+	case nil:
+	case service.ErrNoCanvas:
+		return echo.NewHTTPError(http.StatusNotFound, err.Error())
+	default:
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
 
 	return e.String(http.StatusOK, paint)
 }
