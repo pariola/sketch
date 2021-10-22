@@ -16,7 +16,7 @@
     if (loc.protocol === 'https:') {
         uri = 'wss:';
     }
-    uri += '//' + loc.host + "/api";
+    uri += '//' + loc.host + "/api/canvas";
     uri += loc.pathname + '/ws';
 
     ws = new WebSocket(uri)
