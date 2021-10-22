@@ -13,6 +13,15 @@ func New() *sketch {
 	return &sketch{}
 }
 
+// PrintCanvas returns the string representation of the referenced canvas
+func (s sketch) PrintCanvas(canvasId string) (string, error) {
+
+	// todo: fetch from store
+	c := canvas.New(10, 12)
+
+	return c.Print(), nil
+}
+
 // DrawRectangle retrieves the referenced canvas then draws a new Rectangle on it
 func (s sketch) DrawRectangle(canvasId string, request DrawRectangleRequest) (string, error) {
 
