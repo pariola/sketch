@@ -11,3 +11,11 @@ type DrawRectangleRequest struct {
 	Fill    string `json:"fill"`
 	Outline string `json:"outline"`
 }
+
+// FloodFillRequest represents a flood fill operation on the canvas
+type FloodFillRequest struct {
+	PosX int `json:"pos_x"`
+	PosY int `json:"pos_y"`
+
+	Fill string `json:"fill"`
+}

@@ -28,3 +28,14 @@ func (s sketch) DrawRectangle(canvasId string, request DrawRectangleRequest) (st
 
 	return c.Print(), nil
 }
+
+// FloodFill retrieves the referenced canvas then performs the flood fill operation
+func (s sketch) FloodFill(canvasId string, request FloodFillRequest) (string, error) {
+
+	// todo: fetch from store
+	c := canvas.New(10, 12)
+
+	c.FloodFill(request.PosX, request.PosY, request.Fill)
+
+	return c.Print(), nil
+}
