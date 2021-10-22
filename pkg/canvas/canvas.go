@@ -2,10 +2,12 @@ package canvas
 
 import (
 	"bytes"
+	"sync"
 )
 
 // Canvas
 type Canvas struct {
+	m sync.RWMutex
 
 	// 2D array to represent the points on a Canvas starting from (0,0) top left
 	matrix [][]string
@@ -23,6 +25,24 @@ func New(width, height int) *Canvas {
 	return &Canvas{
 		matrix: matrix,
 	}
+}
+
+// write puts value v into the underlying matrix at position [y][x]
+func (c *Canvas) write(x, y int, v string) {
+
+	c.m.Lock()
+	defer c.m.Unlock()
+
+	c.matrix[y][x] = v
+}
+
+// read returns the value at position [y][x] from the underlying matrix
+func (c *Canvas) read(x, y int) string {
+
+	c.m.RLock()
+	defer c.m.RUnlock()
+
+	return c.matrix[y][x]
 }
 
 // boundary returns the edges/boundaries (x-axis, y-axis) of the Canvas
@@ -78,12 +98,12 @@ func (c *Canvas) Draw(r Rectangle) {
 		for x := r.posX; x < r.posX+r.width; x++ {
 
 			// fill
-			c.matrix[y][x] = r.fillChar
+			c.write(x, y, r.fillChar)
 
 			// paint outline
 			// confirm if point is part of the rectangle boundary
 			if r.outlineChar != "" && (inYBoundary(x, y, r) || inXBoundary(x, y, r)) {
-				c.matrix[y][x] = r.outlineChar
+				c.write(x, y, r.outlineChar)
 			}
 		}
 	}
@@ -99,7 +119,7 @@ func (c *Canvas) FloodFill(x, y int, fillChar string) {
 		return
 	}
 
-	target := c.matrix[y][x]
+	target := c.read(x, y)
 
 	// stop unnecessary fill-ing
 	if target == fillChar {
@@ -122,7 +142,7 @@ func (c *Canvas) floodFill(x, y int, targetChar, fillChar string) {
 		return
 	}
 
-	cur := c.matrix[y][x]
+	cur := c.read(x, y)
 
 	// stop if it is a different character
 	// avoid stack overflow by not revisiting
@@ -131,7 +151,7 @@ func (c *Canvas) floodFill(x, y int, targetChar, fillChar string) {
 	}
 
 	// fill start coordinate
-	c.matrix[y][x] = fillChar
+	c.write(x, y, fillChar)
 
 	// draw around start point
 	c.floodFill(x, y-1, targetChar, fillChar) // up
@@ -152,7 +172,7 @@ func (c *Canvas) Print() string {
 	for y := 0; y < boundY; y++ {
 		for x := 0; x < boundX; x++ {
 
-			cell := c.matrix[y][x]
+			cell := c.read(x, y)
 
 			// skip contiguous blank cells
 			if cell == "" {
