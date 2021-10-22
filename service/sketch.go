@@ -8,6 +8,11 @@ import (
 	"github.com/google/uuid"
 )
 
+var (
+	ErrNoCanvas         = errors.New("no valid canvas found")
+	ErrInvalidRectangle = errors.New("invalid parameters provided for rectangle")
+)
+
 // sketch
 type sketch struct {
 	store map[string]*canvas.Canvas
@@ -48,7 +53,7 @@ func (s sketch) PrintCanvas(canvasId string) (string, error) {
 	c := s.getCanvas(canvasId)
 
 	if c == nil {
-		return "", errors.New("no valid canvas found")
+		return "", ErrNoCanvas
 	}
 
 	return c.Print(), nil
@@ -60,15 +65,14 @@ func (s sketch) DrawRectangle(canvasId string, request DrawRectangleRequest) (st
 	c := s.getCanvas(canvasId)
 
 	if c == nil {
-		return "", errors.New("no valid canvas found")
+		return "", ErrNoCanvas
 	}
 
 	rectangle := canvas.
 		NewRectangle(request.PosX, request.PosY, request.Width, request.Height, request.Fill, request.Outline)
 
-	// todo: validate rectangle
 	if rectangle == nil {
-		return "", errors.New("invalid parameters provided for rectangle")
+		return "", ErrInvalidRectangle
 	}
 
 	c.Draw(*rectangle)
@@ -82,7 +86,7 @@ func (s sketch) FloodFill(canvasId string, request FloodFillRequest) (string, er
 	c := s.getCanvas(canvasId)
 
 	if c == nil {
-		return "", errors.New("no valid canvas found")
+		return "", ErrNoCanvas
 	}
 
 	c.FloodFill(request.PosX, request.PosY, request.Fill)
