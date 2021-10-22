@@ -22,6 +22,12 @@ func New(svc SketchService) *router {
 	return &router{svc: svc}
 }
 
+// NewCanvas creates a new canvas
+func (r router) NewCanvas(e echo.Context) error {
+	id := r.svc.NewCanvas()
+	return e.String(http.StatusOK, id)
+}
+
 // PrintCanvas prints the canvas
 func (r router) PrintCanvas(e echo.Context) error {
 
