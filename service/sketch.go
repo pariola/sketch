@@ -68,8 +68,17 @@ func (s sketch) DrawRectangle(canvasId string, request DrawRectangleRequest) (st
 		return "", ErrNoCanvas
 	}
 
-	rectangle := canvas.
-		NewRectangle(request.PosX, request.PosY, request.Width, request.Height, request.Fill, request.Outline)
+	var fill, outline byte
+
+	if len(request.Fill) > 0 {
+		fill = request.Fill[0]
+	}
+
+	if len(request.Outline) > 0 {
+		outline = request.Outline[0]
+	}
+
+	rectangle := canvas.NewRectangle(request.PosX, request.PosY, request.Width, request.Height, fill, outline)
 
 	if rectangle == nil {
 		return "", ErrInvalidRectangle
@@ -89,7 +98,13 @@ func (s sketch) FloodFill(canvasId string, request FloodFillRequest) (string, er
 		return "", ErrNoCanvas
 	}
 
-	c.FloodFill(request.PosX, request.PosY, request.Fill)
+	var fill byte
+
+	if len(request.Fill) > 0 {
+		fill = request.Fill[0]
+	}
+
+	c.FloodFill(request.PosX, request.PosY, fill)
 
 	return c.Print(), nil
 }
