@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+
 	"sketch/pkg/canvas"
 
 	"github.com/google/uuid"
@@ -30,11 +32,24 @@ func (s *sketch) NewCanvas() string {
 	return id
 }
 
+// getCanvas returns the canvas with the specified id from store, else returns nil
+func (s sketch) getCanvas(id string) *canvas.Canvas {
+
+	if c, ok := s.store[id]; ok {
+		return c
+	}
+
+	return nil
+}
+
 // PrintCanvas returns the string representation of the referenced canvas
 func (s sketch) PrintCanvas(canvasId string) (string, error) {
 
-	// todo: fetch from store
-	c := canvas.New(10, 12)
+	c := s.getCanvas(canvasId)
+
+	if c == nil {
+		return "", errors.New("no valid canvas found")
+	}
 
 	return c.Print(), nil
 }
@@ -42,13 +57,19 @@ func (s sketch) PrintCanvas(canvasId string) (string, error) {
 // DrawRectangle retrieves the referenced canvas then draws a new Rectangle on it
 func (s sketch) DrawRectangle(canvasId string, request DrawRectangleRequest) (string, error) {
 
-	// todo: fetch from store
-	c := canvas.New(10, 12)
+	c := s.getCanvas(canvasId)
+
+	if c == nil {
+		return "", errors.New("no valid canvas found")
+	}
 
 	rectangle := canvas.
 		NewRectangle(request.PosX, request.PosY, request.Width, request.Height, request.Fill, request.Outline)
 
 	// todo: validate rectangle
+	if rectangle == nil {
+		return "", errors.New("invalid parameters provided for rectangle")
+	}
 
 	c.Draw(*rectangle)
 
@@ -58,8 +79,11 @@ func (s sketch) DrawRectangle(canvasId string, request DrawRectangleRequest) (st
 // FloodFill retrieves the referenced canvas then performs the flood fill operation
 func (s sketch) FloodFill(canvasId string, request FloodFillRequest) (string, error) {
 
-	// todo: fetch from store
-	c := canvas.New(10, 12)
+	c := s.getCanvas(canvasId)
+
+	if c == nil {
+		return "", errors.New("no valid canvas found")
+	}
 
 	c.FloodFill(request.PosX, request.PosY, request.Fill)
 
