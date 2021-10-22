@@ -47,7 +47,7 @@ func (r router) broadcast(id, msg string) {
 	}
 }
 
-//
+// PrintCanvasWS
 func (r *router) PrintCanvasWS(e echo.Context) error {
 
 	id := e.Param("id")
