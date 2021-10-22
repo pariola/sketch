@@ -92,6 +92,13 @@ func (c *Canvas) Draw(r Rectangle) {
 // FloodFill wrapper for floodFill
 func (c *Canvas) FloodFill(x, y int, fillChar string) {
 
+	// check canvas bounds
+	boundX, boundY := c.boundary()
+
+	if !inBounds(x, y, boundX, boundY) {
+		return
+	}
+
 	target := c.matrix[y][x]
 
 	// stop unnecessary fill-ing
@@ -108,10 +115,10 @@ func (c *Canvas) FloodFill(x, y int, fillChar string) {
 // character, or a border of the Canvas, is not reached.
 func (c *Canvas) floodFill(x, y int, targetChar, fillChar string) {
 
-	// check Canvas bounds
+	// check canvas bounds
 	boundX, boundY := c.boundary()
 
-	if x < 0 || x >= boundX || y < 0 || y >= boundY {
+	if !inBounds(x, y, boundX, boundY) {
 		return
 	}
 
