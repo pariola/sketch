@@ -114,3 +114,75 @@ func TestCanvas_expand(t *testing.T) {
 		}
 	}
 }
+
+func TestCanvas_FloodFillInside(t *testing.T) {
+
+	c := New(7, 5) // 7x5
+
+	// draw on canvas
+	r := NewRectangle(0, 0, 5, 3, "X", "@")
+
+	c.Draw(*r)
+
+	expected := [][]string{
+		{"@", "@", "@", "@", "@", "", ""},
+		{"@", "O", "O", "O", "@", "", ""},
+		{"@", "@", "@", "@", "@", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+	}
+
+	// perform flood fill operation on boundary
+	c.FloodFill(1, 1, "O")
+
+	// confirm if resulting matrix matches the expected matrix
+	assert.Equal(t, expected, c.matrix, "result does not match expected matrix")
+}
+
+func TestCanvas_FloodFillCanvas(t *testing.T) {
+
+	c := New(7, 5) // 7x5
+
+	// draw on canvas
+	r := NewRectangle(0, 1, 5, 3, "X", "@")
+
+	c.Draw(*r)
+
+	expected := [][]string{
+		{"-", "-", "-", "-", "-", "-", "-"},
+		{"@", "@", "@", "@", "@", "-", "-"},
+		{"@", "X", "X", "X", "@", "-", "-"},
+		{"@", "@", "@", "@", "@", "-", "-"},
+		{"-", "-", "-", "-", "-", "-", "-"},
+	}
+
+	// perform flood fill operation on boundary
+	c.FloodFill(0, 0, "-")
+
+	// confirm if resulting matrix matches the expected matrix
+	assert.Equal(t, expected, c.matrix, "result does not match expected matrix")
+}
+
+func TestCanvas_FloodFillBoundary(t *testing.T) {
+
+	c := New(7, 5) // 7x5
+
+	// draw on canvas
+	r := NewRectangle(0, 0, 5, 3, "X", "@")
+
+	c.Draw(*r)
+
+	expected := [][]string{
+		{"-", "-", "-", "-", "-", "", ""},
+		{"-", "X", "X", "X", "-", "", ""},
+		{"-", "-", "-", "-", "-", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+	}
+
+	// perform flood fill operation on boundary
+	c.FloodFill(3, 2, "-")
+
+	// confirm if resulting matrix matches the expected matrix
+	assert.Equal(t, expected, c.matrix, "result does not match expected matrix")
+}

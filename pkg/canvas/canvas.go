@@ -89,6 +89,50 @@ func (c *canvas) Draw(r Rectangle) {
 	}
 }
 
+// FloodFill wrapper for floodFill
+func (c *canvas) FloodFill(x, y int, fillChar string) {
+
+	target := c.matrix[y][x]
+
+	// stop unnecessary fill-ing
+	if target == fillChar {
+		return
+	}
+
+	c.floodFill(x, y, target, fillChar)
+}
+
+// floodFill draws the fill character to the start coordinate, and
+// continues to attempt drawing the character around (up, down, left, right)
+// in each direction from the position it was drawn at, as long as a different
+// character, or a border of the Canvas, is not reached.
+func (c *canvas) floodFill(x, y int, targetChar, fillChar string) {
+
+	// check canvas bounds
+	boundX, boundY := c.boundary()
+
+	if x < 0 || x >= boundX || y < 0 || y >= boundY {
+		return
+	}
+
+	cur := c.matrix[y][x]
+
+	// stop if it is a different character
+	// avoid stack overflow by not revisiting
+	if cur != targetChar || cur == fillChar {
+		return
+	}
+
+	// fill start coordinate
+	c.matrix[y][x] = fillChar
+
+	// draw around start point
+	c.floodFill(x, y-1, targetChar, fillChar) // up
+	c.floodFill(x, y+1, targetChar, fillChar) // down
+	c.floodFill(x-1, y, targetChar, fillChar) // left
+	c.floodFill(x+1, y, targetChar, fillChar) // right
+}
+
 // Print returns the string representation of the canvas
 func (c *canvas) Print() string {
 
