@@ -9,24 +9,22 @@ type Rectangle struct {
 	// width, height represents the dimensions of the Rectangle
 	width, height int
 
-	// todo: use rune instead
 	// fillChar represents an optional fill character
-	fillChar string
+	fillChar byte
 
-	// todo: use rune instead
 	// outlineChar represents an optional outline character
-	outlineChar string
+	outlineChar byte
 }
 
 // NewRectangle returns an instance of Rectangle with the specified parameters
-func NewRectangle(posX, posY, width, height int, fill, outline string) *Rectangle {
+func NewRectangle(posX, posY, width, height int, fill, outline byte) *Rectangle {
 
 	if posX < 0 || posY < 0 || width < 0 || height < 0 {
 		return nil
 	}
 
 	// one of either fill or outline should always be present
-	if outline == "" && fill == "" {
+	if outline == empty && fill == empty {
 		return nil
 	}
 

@@ -37,7 +37,7 @@ func TestCanvas_DrawWithFill(t *testing.T) {
 	c := New(12, 12) // 12x12
 
 	// rectangle at [2,2] width: 5, height: 5, fill: 'X', outline: none
-	r := NewRectangle(2, 2, 5, 5, "X", "")
+	r := NewRectangle(2, 2, 5, 5, 'X', empty)
 
 	c.Draw(*r)
 
@@ -54,7 +54,7 @@ func TestCanvas_DrawWithOutline(t *testing.T) {
 	c := New(12, 12) // 12x12
 
 	// rectangle at [2,2] width: 5, height: 5, fill: none, outline: 'X'
-	r := NewRectangle(2, 2, 5, 5, "", "X")
+	r := NewRectangle(2, 2, 5, 5, empty, 'X')
 
 	c.Draw(*r)
 
@@ -73,7 +73,7 @@ func TestCanvas_DrawWithFillOutline(t *testing.T) {
 	c := New(12, 12) // 12x12
 
 	// rectangle at [2,2] width: 5, height: 5, fill: none, outline: 'X'
-	r := NewRectangle(2, 2, 5, 5, "O", "X")
+	r := NewRectangle(2, 2, 5, 5, 'O', 'X')
 
 	c.Draw(*r)
 
@@ -95,7 +95,7 @@ func TestCanvas_expand(t *testing.T) {
 	c := New(7, 5) // 7x5
 
 	// draw on canvas
-	r := NewRectangle(0, 0, 5, 3, "X", "")
+	r := NewRectangle(0, 0, 5, 3, 'X', empty)
 
 	c.Draw(*r)
 
@@ -120,20 +120,20 @@ func TestCanvas_FloodFillInside(t *testing.T) {
 	c := New(7, 5) // 7x5
 
 	// draw on canvas
-	r := NewRectangle(0, 0, 5, 3, "X", "@")
+	r := NewRectangle(0, 0, 5, 3, 'X', '@')
 
 	c.Draw(*r)
 
-	expected := [][]string{
-		{"@", "@", "@", "@", "@", "", ""},
-		{"@", "O", "O", "O", "@", "", ""},
-		{"@", "@", "@", "@", "@", "", ""},
-		{"", "", "", "", "", "", ""},
-		{"", "", "", "", "", "", ""},
+	expected := [][]byte{
+		{'@', '@', '@', '@', '@', empty, empty},
+		{'@', 'O', 'O', 'O', '@', empty, empty},
+		{'@', '@', '@', '@', '@', empty, empty},
+		{empty, empty, empty, empty, empty, empty, empty},
+		{empty, empty, empty, empty, empty, empty, empty},
 	}
 
 	// perform flood fill operation on boundary
-	c.FloodFill(1, 1, "O")
+	c.FloodFill(1, 1, 'O')
 
 	// confirm if resulting matrix matches the expected matrix
 	assert.Equal(t, expected, c.matrix, "result does not match expected matrix")
@@ -144,20 +144,20 @@ func TestCanvas_FloodFillCanvas(t *testing.T) {
 	c := New(7, 5) // 7x5
 
 	// draw on canvas
-	r := NewRectangle(0, 1, 5, 3, "X", "@")
+	r := NewRectangle(0, 1, 5, 3, 'X', '@')
 
 	c.Draw(*r)
 
-	expected := [][]string{
-		{"-", "-", "-", "-", "-", "-", "-"},
-		{"@", "@", "@", "@", "@", "-", "-"},
-		{"@", "X", "X", "X", "@", "-", "-"},
-		{"@", "@", "@", "@", "@", "-", "-"},
-		{"-", "-", "-", "-", "-", "-", "-"},
+	expected := [][]byte{
+		{'-', '-', '-', '-', '-', '-', '-'},
+		{'@', '@', '@', '@', '@', '-', '-'},
+		{'@', 'X', 'X', 'X', '@', '-', '-'},
+		{'@', '@', '@', '@', '@', '-', '-'},
+		{'-', '-', '-', '-', '-', '-', '-'},
 	}
 
 	// perform flood fill operation on boundary
-	c.FloodFill(0, 0, "-")
+	c.FloodFill(0, 0, '-')
 
 	// confirm if resulting matrix matches the expected matrix
 	assert.Equal(t, expected, c.matrix, "result does not match expected matrix")
@@ -168,20 +168,20 @@ func TestCanvas_FloodFillBoundary(t *testing.T) {
 	c := New(7, 5) // 7x5
 
 	// draw on canvas
-	r := NewRectangle(0, 0, 5, 3, "X", "@")
+	r := NewRectangle(0, 0, 5, 3, 'X', '@')
 
 	c.Draw(*r)
 
-	expected := [][]string{
-		{"-", "-", "-", "-", "-", "", ""},
-		{"-", "X", "X", "X", "-", "", ""},
-		{"-", "-", "-", "-", "-", "", ""},
-		{"", "", "", "", "", "", ""},
-		{"", "", "", "", "", "", ""},
+	expected := [][]byte{
+		{'-', '-', '-', '-', '-', empty, empty},
+		{'-', 'X', 'X', 'X', '-', empty, empty},
+		{'-', '-', '-', '-', '-', empty, empty},
+		{empty, empty, empty, empty, empty, empty, empty},
+		{empty, empty, empty, empty, empty, empty, empty},
 	}
 
 	// perform flood fill operation on boundary
-	c.FloodFill(3, 2, "-")
+	c.FloodFill(3, 2, '-')
 
 	// confirm if resulting matrix matches the expected matrix
 	assert.Equal(t, expected, c.matrix, "result does not match expected matrix")
@@ -193,11 +193,11 @@ func TestCanvas_Print(t *testing.T) {
 
 	c := New(28, 12)
 
-	c.Draw(*NewRectangle(15, 0, 7, 6, ".", ""))
-	c.Draw(*NewRectangle(0, 3, 8, 4, "", "O"))
-	c.Draw(*NewRectangle(5, 5, 5, 3, "X", "X"))
+	c.Draw(*NewRectangle(15, 0, 7, 6, '.', empty))
+	c.Draw(*NewRectangle(0, 3, 8, 4, empty, 'O'))
+	c.Draw(*NewRectangle(5, 5, 5, 3, 'X', 'X'))
 
-	c.FloodFill(0, 0, "-")
+	c.FloodFill(0, 0, '-')
 
 	assert.Equal(t, expected, c.Print())
 }

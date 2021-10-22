@@ -47,7 +47,7 @@ func Test_inXBoundary(t *testing.T) {
 		result bool
 	}
 
-	r := NewRectangle(0, 0, 3, 3, ".", "")
+	r := NewRectangle(0, 0, 3, 3, '.', empty)
 
 	xBoundaries := []boundary{
 		{0, 0, true},
@@ -81,7 +81,7 @@ func Test_inYBoundary(t *testing.T) {
 		result bool
 	}
 
-	r := NewRectangle(0, 0, 3, 3, ".", "")
+	r := NewRectangle(0, 0, 3, 3, '.', empty)
 
 	yBoundaries := []boundary{
 		{0, 0, true},

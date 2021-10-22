@@ -5,21 +5,25 @@ import (
 	"sync"
 )
 
-// Canvas
+var (
+	empty = byte(0)
+)
+
+// Canvas represents a real-life drawable canvas
 type Canvas struct {
 	m sync.RWMutex
 
 	// 2D array to represent the points on a Canvas starting from (0,0) top left
-	matrix [][]string
+	matrix [][]byte
 }
 
 // New returns an instance of the Canvas with the required size
 func New(width, height int) *Canvas {
 
-	matrix := make([][]string, height)
+	matrix := make([][]byte, height)
 
 	for i := 0; i < len(matrix); i++ {
-		matrix[i] = make([]string, width)
+		matrix[i] = make([]byte, width)
 	}
 
 	return &Canvas{
@@ -28,7 +32,7 @@ func New(width, height int) *Canvas {
 }
 
 // write puts value v into the underlying matrix at position [y][x]
-func (c *Canvas) write(x, y int, v string) {
+func (c *Canvas) write(x, y int, v byte) {
 
 	c.m.Lock()
 	defer c.m.Unlock()
@@ -37,7 +41,7 @@ func (c *Canvas) write(x, y int, v string) {
 }
 
 // read returns the value at position [y][x] from the underlying matrix
-func (c *Canvas) read(x, y int) string {
+func (c *Canvas) read(x, y int) byte {
 
 	c.m.RLock()
 	defer c.m.RUnlock()
@@ -69,7 +73,7 @@ func (c *Canvas) expand(x, y int) {
 
 		// add blank rows
 		for i := 0; i < (y - boundY); i++ {
-			c.matrix = append(c.matrix, make([]string, boundX))
+			c.matrix = append(c.matrix, make([]byte, boundX))
 		}
 
 		boundY = y
@@ -81,7 +85,7 @@ func (c *Canvas) expand(x, y int) {
 
 		// expand all rows by copying
 		for i := 0; i < boundY; i++ {
-			row := make([]string, boundX)
+			row := make([]byte, boundX)
 			copy(row, c.matrix[i])
 			c.matrix[i] = row
 		}
@@ -102,7 +106,7 @@ func (c *Canvas) Draw(r Rectangle) {
 
 			// paint outline
 			// confirm if point is part of the rectangle boundary
-			if r.outlineChar != "" && (inYBoundary(x, y, r) || inXBoundary(x, y, r)) {
+			if r.outlineChar != byte(0) && (inYBoundary(x, y, r) || inXBoundary(x, y, r)) {
 				c.write(x, y, r.outlineChar)
 			}
 		}
@@ -110,7 +114,7 @@ func (c *Canvas) Draw(r Rectangle) {
 }
 
 // FloodFill wrapper for floodFill
-func (c *Canvas) FloodFill(x, y int, fillChar string) {
+func (c *Canvas) FloodFill(x, y int, fillChar byte) {
 
 	// check canvas bounds
 	boundX, boundY := c.boundary()
@@ -133,7 +137,7 @@ func (c *Canvas) FloodFill(x, y int, fillChar string) {
 // continues to attempt drawing the character around (up, down, left, right)
 // in each direction from the position it was drawn at, as long as a different
 // character, or a border of the Canvas, is not reached.
-func (c *Canvas) floodFill(x, y int, targetChar, fillChar string) {
+func (c *Canvas) floodFill(x, y int, targetChar, fillChar byte) {
 
 	// check canvas bounds
 	boundX, boundY := c.boundary()
@@ -175,7 +179,7 @@ func (c *Canvas) Print() string {
 			cell := c.read(x, y)
 
 			// skip contiguous blank cells
-			if cell == "" {
+			if cell == byte(0) {
 				hasBlank = true
 				continue
 			}
@@ -190,7 +194,7 @@ func (c *Canvas) Print() string {
 				}
 			}
 
-			buf.WriteString(cell)
+			buf.WriteByte(cell)
 		}
 
 		// not last row and doesn't have blank spaces before

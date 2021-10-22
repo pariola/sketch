@@ -10,10 +10,10 @@ func TestNewRectangle(t *testing.T) {
 
 	// bad
 	badOnes := []*Rectangle{
-		NewRectangle(-2, 2, 5, 5, "X", "@"),
-		NewRectangle(2, -2, 5, 5, "X", "@"),
-		NewRectangle(2, 2, -5, 5, "X", "@"),
-		NewRectangle(2, 2, 5, -5, "X", "@"),
+		NewRectangle(-2, 2, 5, 5, 'X', '@'),
+		NewRectangle(2, -2, 5, 5, 'X', '@'),
+		NewRectangle(2, 2, -5, 5, 'X', '@'),
+		NewRectangle(2, 2, 5, -5, 'X', '@'),
 	}
 
 	for _, r := range badOnes {
@@ -21,7 +21,7 @@ func TestNewRectangle(t *testing.T) {
 	}
 
 	// good
-	r := NewRectangle(0, 0, 5, 5, "X", "@")
+	r := NewRectangle(0, 0, 5, 5, 'X', '@')
 
 	assert.NotNil(t, r, "rectangle should be valid")
 
@@ -34,6 +34,6 @@ func TestNewRectangle(t *testing.T) {
 	assert.Equal(t, 5, r.height, "invalid height size")
 
 	// fill & outline
-	assert.Equal(t, "X", r.fillChar, "invalid fill character")
-	assert.Equal(t, "@", r.outlineChar, "invalid outline character")
+	assert.Equal(t, byte('X'), r.fillChar, "invalid fill character")
+	assert.Equal(t, byte('@'), r.outlineChar, "invalid outline character")
 }
