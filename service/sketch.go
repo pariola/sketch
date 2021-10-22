@@ -2,15 +2,32 @@ package service
 
 import (
 	"sketch/pkg/canvas"
+
+	"github.com/google/uuid"
 )
 
 // sketch
 type sketch struct {
+	store map[string]*canvas.Canvas
 }
 
 // New returns an instance of sketch service
 func New() *sketch {
-	return &sketch{}
+	return &sketch{
+		store: make(map[string]*canvas.Canvas, 0),
+	}
+}
+
+// NewCanvas creates and stores a new canvas with a GUID
+func (s *sketch) NewCanvas() string {
+
+	id := uuid.NewString()
+
+	// default 28x12
+	// store new canvas with id
+	s.store[id] = canvas.New(28, 12)
+
+	return id
 }
 
 // PrintCanvas returns the string representation of the referenced canvas
