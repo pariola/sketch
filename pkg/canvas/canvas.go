@@ -143,6 +143,7 @@ func (c *Canvas) floodFill(x, y int, targetChar, fillChar string) {
 // Print returns the string representation of the Canvas
 func (c *Canvas) Print() string {
 
+	var hasBlank bool
 	var buf bytes.Buffer
 
 	boundX, boundY := c.boundary()
@@ -150,10 +151,32 @@ func (c *Canvas) Print() string {
 	// read all cells
 	for y := 0; y < boundY; y++ {
 		for x := 0; x < boundX; x++ {
+
 			cell := c.matrix[y][x]
+
+			// skip contiguous blank cells
+			if cell == "" {
+				hasBlank = true
+				continue
+			}
+
+			// hasBlank and current cell isn't blank, add a space
+			if hasBlank {
+				hasBlank = false // reset
+
+				// at least buffer isn't empty
+				if buf.Len() > 0 {
+					buf.WriteString(" ")
+				}
+			}
+
 			buf.WriteString(cell)
 		}
-		buf.WriteString(" ")
+
+		// not last row and doesn't have blank spaces before
+		if !hasBlank && y != boundY-1 {
+			buf.WriteString(" ")
+		}
 	}
 
 	return buf.String()
