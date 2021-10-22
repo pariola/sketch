@@ -22,6 +22,20 @@ func New(svc SketchService) *router {
 	return &router{svc: svc}
 }
 
+// PrintCanvas prints the canvas
+func (r router) PrintCanvas(e echo.Context) error {
+
+	id := e.Param("id")
+
+	paint, err := r.svc.PrintCanvas(id)
+
+	if err != nil {
+		return err
+	}
+
+	return e.String(http.StatusOK, paint)
+}
+
 // DrawRectangle draws a rectangle
 func (r router) DrawRectangle(e echo.Context) error {
 

@@ -19,6 +19,7 @@ func main() {
 	// register routes
 	e := echo.New()
 
+	e.GET("/:id", h.PrintCanvas)
 	e.POST("/:id/draw", h.DrawRectangle)
 	e.POST("/:id/floodfill", h.FloodFill)
 
