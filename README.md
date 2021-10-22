@@ -10,18 +10,30 @@ Run the command below to start the Sketch Service on port 5000.
 go run main.go
 ```
 
-### Endpoints
+### Client View (read-only)
+
+uses a websocket to provide near realtime changes to the Canvas.
+
+#### Create Canvas
+
+`http://localhost:5000/` - creates a new canvas and redirects to the canvas view.
+
+#### View Canvas
+
+`http://localhost:5000/[CANVAS ID]` - displays the canvas.
+
+### API Endpoints
 
 URL parameter `id` refers to the ID of the canvas.
 
 #### Create Canvas
 
-`GET /` Creates a new canvas then returns the ID.
+`GET /api/canvas` Creates a new canvas then returns the ID.
 
 Request:
 
 ```text
-GET /
+GET /api/canvas
 ```
 
 Response:
@@ -32,7 +44,7 @@ Response:
 
 #### Draw Rectangle
 
-`POST /:id/draw` Draws a Rectangle on the canvas then prints it.
+`POST /api/canvas/:id/draw` Draws a Rectangle on the canvas then prints it.
 
 Parameters:
 
@@ -48,7 +60,7 @@ NOTE: One of either `fill` or `outline` should always be present.
 Request:
 
 ```text
-POST /78587113-74e0-4997-852c-2b0d469e5194/draw
+POST /api/canvas/78587113-74e0-4997-852c-2b0d469e5194/draw
 
 {
   "pos_x": 3,
@@ -68,7 +80,7 @@ Response:
 
 #### Flood Fill
 
-`POST /:id/floodfill` Performs the flood fill operation on the canvas and then prints it.
+`POST /api/canvas/:id/floodfill` Performs the flood fill operation on the canvas and then prints it.
 
 Parameters:
 
@@ -79,7 +91,7 @@ Parameters:
 Request:
 
 ```text
-POST /78587113-74e0-4997-852c-2b0d469e5194/floodfill
+POST /api/canvas/78587113-74e0-4997-852c-2b0d469e5194/floodfill
 
 {
   "pos_x": 4,
@@ -96,12 +108,12 @@ Response:
 
 #### Print Canvas
 
-`GET /:id` Returns the content of the canvas with the referenced `id`.
+`GET /api/canvas/:id` Returns the content of the canvas with the referenced `id`.
 
 Request:
 
 ```text
-GET /78587113-74e0-4997-852c-2b0d469e5194
+GET /api/canvas/78587113-74e0-4997-852c-2b0d469e5194
 ```
 
 Response:
