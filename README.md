@@ -2,6 +2,8 @@
 
 This service implements an ASCII art drawing canvas as a web service.
 
+The `Canvas` has a default size of `28x12`, it can automatically expand when trying to draw a `Rectangle` that goes beyond its original size.
+
 ### Run
 
 Run the command below to start the Sketch Service on port 5000.
