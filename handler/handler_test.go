@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"sketch/pkg/canvas"
 	"sketch/service"
 
 	"github.com/labstack/echo/v4"
@@ -13,11 +14,24 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// dummyStorage implements storage.Store but does nothing
+type dummyStorage struct{}
+
+func (d dummyStorage) SaveState(_ map[string]*canvas.Canvas) error {
+	return nil
+}
+
+func (d dummyStorage) LoadState() (map[string]*canvas.Canvas, error) {
+	return make(map[string]*canvas.Canvas, 0), nil
+}
+
 func TestRouter_NewCanvasPage(t *testing.T) {
 
 	e := echo.New()
 
-	h := New(service.New())
+	h := New(
+		service.New(&dummyStorage{}),
+	)
 
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 
@@ -35,7 +49,9 @@ func TestRouter_NewCanvasPage(t *testing.T) {
 func TestRouter_NewCanvas(t *testing.T) {
 	e := echo.New()
 
-	h := New(service.New())
+	h := New(
+		service.New(&dummyStorage{}),
+	)
 
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 
@@ -55,7 +71,7 @@ func TestRouter_DrawRectangle(t *testing.T) {
 
 	e := echo.New()
 
-	svc := service.New()
+	svc := service.New(&dummyStorage{})
 	canvasId := svc.NewCanvas()
 
 	h := New(svc)
@@ -95,7 +111,7 @@ func TestRouter_FloodFill(t *testing.T) {
 
 	e := echo.New()
 
-	svc := service.New()
+	svc := service.New(&dummyStorage{})
 	canvasId := svc.NewCanvas()
 
 	h := New(svc)
@@ -132,7 +148,7 @@ func TestRouter_PrintCanvas(t *testing.T) {
 
 	e := echo.New()
 
-	svc := service.New()
+	svc := service.New(&dummyStorage{})
 	canvasId := svc.NewCanvas()
 
 	svcRequest := service.DrawRectangleRequest{
