@@ -12,12 +12,11 @@ func TestNew(t *testing.T) {
 
 	c := New(w, h)
 
-	for _, row := range c.matrix {
+	for _, row := range c.Matrix {
 		assert.Equal(t, w, len(row), "invalid canvas width")
 	}
 
-	assert.Equal(t, h, len(c.matrix), "invalid canvas height")
-
+	assert.Equal(t, h, len(c.Matrix), "invalid canvas height")
 }
 
 func TestCanvas_boundary(t *testing.T) {
@@ -44,7 +43,7 @@ func TestCanvas_DrawWithFill(t *testing.T) {
 	// confirm all rectangle cells
 	for y := r.posY; y < r.posY+r.height; y++ {
 		for x := r.posX; x < r.posX+r.width; x++ {
-			assert.Equalf(t, r.fillChar, c.matrix[y][x], "invalid cell [%d, %d]", x, y)
+			assert.Equalf(t, r.fillChar, c.Matrix[y][x], "invalid cell [%d, %d]", x, y)
 		}
 	}
 }
@@ -62,7 +61,7 @@ func TestCanvas_DrawWithOutline(t *testing.T) {
 	for y := r.posY; y < r.posY+r.height; y++ {
 		for x := r.posX; x < r.posX+r.width; x++ {
 			if inYBoundary(x, y, *r) || inXBoundary(x, y, *r) {
-				assert.Equalf(t, r.outlineChar, c.matrix[y][x], "invalid cell [%d, %d]", x, y)
+				assert.Equalf(t, r.outlineChar, c.Matrix[y][x], "invalid cell [%d, %d]", x, y)
 			}
 		}
 	}
@@ -81,10 +80,10 @@ func TestCanvas_DrawWithFillOutline(t *testing.T) {
 		for x := r.posX; x < r.posX+r.width; x++ {
 			if inYBoundary(x, y, *r) || inXBoundary(x, y, *r) {
 				// boundary
-				assert.Equalf(t, r.outlineChar, c.matrix[y][x], "invalid cell [%d, %d]", x, y)
+				assert.Equalf(t, r.outlineChar, c.Matrix[y][x], "invalid cell [%d, %d]", x, y)
 			} else {
 				// insides
-				assert.Equalf(t, r.fillChar, c.matrix[y][x], "invalid cell [%d, %d]", x, y)
+				assert.Equalf(t, r.fillChar, c.Matrix[y][x], "invalid cell [%d, %d]", x, y)
 			}
 		}
 	}
@@ -110,7 +109,7 @@ func TestCanvas_expand(t *testing.T) {
 	// confirm all rectangle cells
 	for y := r.posY; y < r.posY+r.height; y++ {
 		for x := r.posX; x < r.posX+r.width; x++ {
-			assert.Equalf(t, r.fillChar, c.matrix[y][x], "invalid cell [%d, %d]", x, y)
+			assert.Equalf(t, r.fillChar, c.Matrix[y][x], "invalid cell [%d, %d]", x, y)
 		}
 	}
 }
@@ -136,7 +135,7 @@ func TestCanvas_FloodFillInside(t *testing.T) {
 	c.FloodFill(1, 1, 'O')
 
 	// confirm if resulting matrix matches the expected matrix
-	assert.Equal(t, expected, c.matrix, "result does not match expected matrix")
+	assert.Equal(t, expected, c.Matrix, "result does not match expected matrix")
 }
 
 func TestCanvas_FloodFillCanvas(t *testing.T) {
@@ -160,7 +159,7 @@ func TestCanvas_FloodFillCanvas(t *testing.T) {
 	c.FloodFill(0, 0, '-')
 
 	// confirm if resulting matrix matches the expected matrix
-	assert.Equal(t, expected, c.matrix, "result does not match expected matrix")
+	assert.Equal(t, expected, c.Matrix, "result does not match expected matrix")
 }
 
 func TestCanvas_FloodFillBoundary(t *testing.T) {
@@ -184,7 +183,7 @@ func TestCanvas_FloodFillBoundary(t *testing.T) {
 	c.FloodFill(3, 2, '-')
 
 	// confirm if resulting matrix matches the expected matrix
-	assert.Equal(t, expected, c.matrix, "result does not match expected matrix")
+	assert.Equal(t, expected, c.Matrix, "result does not match expected matrix")
 }
 
 func TestCanvas_Print(t *testing.T) {

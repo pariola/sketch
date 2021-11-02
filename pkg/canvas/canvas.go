@@ -14,7 +14,7 @@ type Canvas struct {
 	m sync.RWMutex
 
 	// 2D array to represent the points on a Canvas starting from (0,0) top left
-	matrix [][]byte
+	Matrix [][]byte
 }
 
 // New returns an instance of the Canvas with the required size
@@ -27,26 +27,26 @@ func New(width, height int) *Canvas {
 	}
 
 	return &Canvas{
-		matrix: matrix,
+		Matrix: matrix,
 	}
 }
 
-// write puts value v into the underlying matrix at position [y][x]
+// write puts value v into the underlying Matrix at position [y][x]
 func (c *Canvas) write(x, y int, v byte) {
 
 	c.m.Lock()
 	defer c.m.Unlock()
 
-	c.matrix[y][x] = v
+	c.Matrix[y][x] = v
 }
 
-// read returns the value at position [y][x] from the underlying matrix
+// read returns the value at position [y][x] from the underlying Matrix
 func (c *Canvas) read(x, y int) byte {
 
 	c.m.RLock()
 	defer c.m.RUnlock()
 
-	return c.matrix[y][x]
+	return c.Matrix[y][x]
 }
 
 // boundary returns the edges/boundaries (x-axis, y-axis) of the Canvas
@@ -54,10 +54,10 @@ func (c *Canvas) boundary() (int, int) {
 
 	var x, y int
 
-	y = len(c.matrix)
+	y = len(c.Matrix)
 
 	if y > 0 {
-		x = len(c.matrix[0])
+		x = len(c.Matrix[0])
 	}
 
 	return x, y
@@ -73,7 +73,7 @@ func (c *Canvas) expand(x, y int) {
 
 		// add blank rows
 		for i := 0; i < (y - boundY); i++ {
-			c.matrix = append(c.matrix, make([]byte, boundX))
+			c.Matrix = append(c.Matrix, make([]byte, boundX))
 		}
 
 		boundY = y
@@ -86,8 +86,8 @@ func (c *Canvas) expand(x, y int) {
 		// expand all rows by copying
 		for i := 0; i < boundY; i++ {
 			row := make([]byte, boundX)
-			copy(row, c.matrix[i])
-			c.matrix[i] = row
+			copy(row, c.Matrix[i])
+			c.Matrix[i] = row
 		}
 	}
 }
