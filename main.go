@@ -5,15 +5,18 @@ import (
 
 	"sketch/handler"
 	"sketch/service"
+	"sketch/storage"
 
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
 
+	store := storage.New("sketch.gob")
+
 	// setup handler
 	h := handler.New(
-		service.New(),
+		service.New(store),
 	)
 
 	// register routes

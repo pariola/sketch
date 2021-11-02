@@ -3,8 +3,21 @@ package service
 import (
 	"testing"
 
+	"sketch/pkg/canvas"
+
 	"github.com/stretchr/testify/assert"
 )
+
+// dummyStorage implements storage.Store but does nothing
+type dummyStorage struct{}
+
+func (d dummyStorage) SaveState(_ map[string]*canvas.Canvas) error {
+	return nil
+}
+
+func (d dummyStorage) LoadState() (map[string]*canvas.Canvas, error) {
+	return make(map[string]*canvas.Canvas, 0), nil
+}
 
 func TestSketch_DrawRectangle(t *testing.T) {
 
@@ -13,7 +26,7 @@ func TestSketch_DrawRectangle(t *testing.T) {
 		valid   bool
 	}
 
-	svc := New()
+	svc := New(&dummyStorage{})
 
 	id := svc.NewCanvas()
 
@@ -42,7 +55,7 @@ func TestSketch_FloodFill(t *testing.T) {
 		valid   bool
 	}
 
-	svc := New()
+	svc := New(&dummyStorage{})
 
 	id := svc.NewCanvas()
 
@@ -67,7 +80,7 @@ func TestSketch_FloodFill(t *testing.T) {
 
 func TestSketch_PrintCanvas(t *testing.T) {
 
-	svc := New()
+	svc := New(&dummyStorage{})
 
 	id := svc.NewCanvas()
 
@@ -82,7 +95,7 @@ func TestSketch_PrintCanvas(t *testing.T) {
 
 func TestSketch_NewCanvas(t *testing.T) {
 
-	svc := New()
+	svc := New(&dummyStorage{})
 
 	id := svc.NewCanvas()
 
